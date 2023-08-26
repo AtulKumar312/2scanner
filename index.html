@@ -38,6 +38,7 @@
         const endSessionQRCode = "http://end-session"; // Change this to the QR code to end a session
         let sessionStarted = false;
         let scannerEnabled = true;
+        const scannedQRCodes = []; // Array to store scanned QR codes
 
         const toggleScannerButton = document.getElementById("toggleScanner");
         toggleScannerButton.addEventListener("click", toggleScanner);
@@ -93,9 +94,13 @@
         const searchInputField = document.getElementById("searchInput");
 
         function displayResult(message) {
-            const resultElement = document.createElement("p");
-            resultElement.textContent = "Scanned QR Code: " + message;
-            resultContainer.appendChild(resultElement);
+            // Check if the scanned QR code is already in the list
+            if (!scannedQRCodes.includes(message)) {
+                scannedQRCodes.push(message); // Add scanned QR code to the list
+                const resultElement = document.createElement("p");
+                resultElement.textContent = "Scanned QR Code: " + message;
+                resultContainer.appendChild(resultElement);
+            }
         }
 
         function startSession() {
@@ -110,6 +115,8 @@
             sessionMessage.style.display = "none";
             searchArea.style.display = "none"; // Hide the search area
             resultContainer.innerHTML = "Session Ended"; // Display "Session Ended" message
+            scannedQRCodes.length = 0; // Clear the scanned QR codes array
+            startScanner(); // Start the scanner again
         }
 
         function reduceSearchAreaHeight() {
