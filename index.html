@@ -37,6 +37,7 @@
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
         const searchArea = document.getElementById("searchArea");
+        const scannedQRCodes = new Set(); // Keep track of scanned QR codes
 
         qrCodeScanner.start(
             { facingMode: "environment" },
@@ -64,9 +65,12 @@
         const sessionMessage = document.getElementById("sessionMessage");
 
         function displayResult(message) {
-            const resultElement = document.createElement("p");
-            resultElement.textContent = "Scanned QR Code: " + message;
-            resultContainer.appendChild(resultElement);
+            if (!scannedQRCodes.has(message)) {
+                const resultElement = document.createElement("p");
+                resultElement.textContent = "Scanned QR Code: " + message;
+                resultContainer.appendChild(resultElement);
+                scannedQRCodes.add(message); // Add to the set of scanned QR codes
+            }
         }
 
         function startSession() {
