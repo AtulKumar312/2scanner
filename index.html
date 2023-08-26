@@ -13,16 +13,14 @@
     <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
-        const scannedCodes = new Set(); // To keep track of scanned QR codes
+        const expectedQRCode = "1234"; // YOUR EXPECTED QR CODE HERE
 
         qrCodeScanner.start(
             { facingMode: "environment" }, // Use the back camera
             { fps: 10, qrbox: 250 },
             (qrCodeMessage) => {
-                // Check if the QR code has been scanned before
-                if (!scannedCodes.has(qrCodeMessage)) {
+                if (qrCodeMessage === expectedQRCode) {
                     console.log("QR Code detected:", qrCodeMessage);
-                    scannedCodes.add(qrCodeMessage); // Add to the set of scanned codes
                     displayResult(qrCodeMessage);
                 }
             },
@@ -45,9 +43,8 @@
                 { facingMode: "environment" }, // Use the back camera
                 { fps: 10, qrbox: 250 },
                 (qrCodeMessage) => {
-                    if (!scannedCodes.has(qrCodeMessage)) {
+                    if (qrCodeMessage === expectedQRCode) {
                         console.log("QR Code detected:", qrCodeMessage);
-                        scannedCodes.add(qrCodeMessage);
                         displayResult(qrCodeMessage);
                     }
                 },
