@@ -139,10 +139,26 @@
         function handleQRCodeScannedDuringSearch(qrCodeMessage) {
             if (qrCodeMessage === searchInput.value) {
                 console.log("Searched QR Code found:", qrCodeMessage);
-                displayResult("Searched QR Code Found: " + qrCodeMessage);
-                qrCodeScanner.stop(); // Turn off the scanner when searched item is found
+                displayResult("Book Found: " + qrCodeMessage);
+                qrCodeScanner.stop(); // Turn off the scanner when the correct book is found
             } else if (qrCodeMessage === endSessionQRCode) {
                 endSession();
+            } else {
+                console.log("Searched QR Code doesn't match:", qrCodeMessage);
+                displayResult("Wrong Book: " + qrCodeMessage);
+                setTimeout(() => {
+                    clearWrongBookMessage();
+                }, 750); // Remove the "Wrong Book" message after 3 seconds (adjust as needed)
+            }
+        }
+
+        function clearWrongBookMessage() {
+            const wrongBookMessage = "Wrong Book: " + searchInput.value;
+            const resultElements = resultContainer.getElementsByTagName("p");
+            for (const element of resultElements) {
+                if (element.textContent === wrongBookMessage) {
+                    element.remove();
+                }
             }
         }
 
