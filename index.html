@@ -136,24 +136,4 @@
         function performSearch() {
             const searchTerm = searchInput.value;
             if (searchTerm) {
-                qrCodeScanner.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: 250 },
-                    handleQRCodeScannedDuringSearch,
-                    handleQRCodeError
-                );
-                reduceSearchAreaHeight(); // Call function to reduce search area height
-            }
-        }
-
-        function handleQRCodeScannedDuringSearch(qrCodeMessage) {
-            if (qrCodeMessage === searchInput.value) {
-                console.log("Searched QR Code found:", qrCodeMessage);
-                displayResult("Searched QR Code Found: " + qrCodeMessage);
-            }
-        }
-
-        // ... Rest of your code ...
-    </script>
-</body>
-</html>
+                if (searchTerm === endSessionQRCode) {
