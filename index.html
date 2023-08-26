@@ -129,4 +129,38 @@
             // If a new QR code is found, you can display a message or perform further actions.
             if (message !== startSessionQRCode) {
                 console.log("New QR Code found:", message);
-               
+                displayResult("New QR Code Found: " + message);
+            }
+        }
+
+        function performSearch() {
+            const searchTerm = searchInput.value;
+            if (searchTerm && sessionStarted) {
+                if (searchTerm === endSessionQRCode) {
+                    endSession();
+                } else {
+                    qrCodeScanner.start(
+                        { facingMode: "environment" },
+                        { fps: 10, qrbox: 250 },
+                        handleQRCodeScannedDuringSearch,
+                        handleQRCodeError
+                    );
+                    reduceSearchAreaHeight(); // Call function to reduce search area height
+                }
+            }
+        }
+
+        function handleQRCodeScannedDuringSearch(qrCodeMessage) {
+            if (qrCodeMessage === searchInput.value) {
+                console.log("Searched QR Code found:", qrCodeMessage);
+                displayResult("Searched QR Code Found: " + qrCodeMessage);
+            } else if (qrCodeMessage === endSessionQRCode) {
+                endSession();
+            }
+        }
+
+        // Initialize the scanner
+        startScanner();
+    </script>
+</body>
+</html>
