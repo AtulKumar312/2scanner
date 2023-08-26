@@ -10,7 +10,7 @@
             max-width: 100%;
         }
         #searchArea {
-            margin-top: 20px;
+            margin-top: 200px;
         }
     </style>
 </head>
@@ -19,10 +19,12 @@
 
     <div id="reader"></div>
 
+    <button id="toggleScanner">Toggle Scanner</button>
+
     <div id="searchArea" style="display: none;">
         <h2>Search Area</h2>
-        <input type="text" id="searchInput" placeholder="Enter value to search" disabled>
-        <button id="searchButton" disabled>Search</button>
+        <input type="text" id="searchInput" placeholder="Enter value to search">
+        <button id="searchButton">Search</button>
     </div>
 
     <div id="result"></div>
@@ -33,18 +35,32 @@
         const qrCodeScanner = new Html5Qrcode("reader");
         const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
         let sessionStarted = false;
-        let scannerEnabled = true; // Added variable to track scanner state
+        let scannerEnabled = true;
+
+        const toggleScannerButton = document.getElementById("toggleScanner");
+        toggleScannerButton.addEventListener("click", toggleScanner);
+
+        const searchArea = document.getElementById("searchArea");
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
-        const searchArea = document.getElementById("searchArea");
-        const scannedQRCodes = new Set(); // Keep track of scanned QR codes
+        searchButton.addEventListener("click", performSearch);
 
-        qrCodeScanner.start(
-            { facingMode: "environment" },
-            { fps: 10, qrbox: 250 },
-            handleQRCodeScanned,
-            handleQRCodeError
-        );
+        function toggleScanner() {
+            if (!sessionStarted) {
+                if (scannerEnabled) {
+                    qrCodeScanner.clear();
+                    scannerEnabled = false;
+                } else {
+                    qrCodeScanner.start(
+                        { facingMode: "environment" },
+                        { fps: 10, qrbox: 250 },
+                        handleQRCodeScanned,
+                        handleQRCodeError
+                    );
+                    scannerEnabled = true;
+                }
+            }
+        }
 
         function handleQRCodeScanned(qrCodeMessage) {
             if (!sessionStarted && qrCodeMessage === startSessionQRCode) {
@@ -63,22 +79,19 @@
 
         const resultContainer = document.getElementById("result");
         const sessionMessage = document.getElementById("sessionMessage");
+        const searchInputField = document.getElementById("searchInput");
 
         function displayResult(message) {
-            if (!scannedQRCodes.has(message)) {
-                const resultElement = document.createElement("p");
-                resultElement.textContent = "Scanned QR Code: " + message;
-                resultContainer.appendChild(resultElement);
-                scannedQRCodes.add(message); // Add to the set of scanned QR codes
-            }
+            const resultElement = document.createElement("p");
+            resultElement.textContent = "Scanned QR Code: " + message;
+            resultContainer.appendChild(resultElement);
         }
 
         function startSession() {
             sessionStarted = true;
             sessionMessage.style.display = "block";
-            searchInput.removeAttribute("disabled"); // Enable search input
-            searchButton.removeAttribute("disabled"); // Enable search button
             searchArea.style.display = "block"; // Display the search area
+            qrCodeScanner.stop(); // Turn off the camera after session has started
         }
 
         function attemptToFindNewQRCode(message) {
@@ -93,14 +106,22 @@
 
         function performSearch() {
             const searchTerm = searchInput.value;
-            if (scannerEnabled && searchTerm === startSessionQRCode) {
-                console.log("Searched QR Code found:", searchTerm);
-                displayResult("Searched QR Code Found: " + searchTerm);
-                scannerEnabled = false; // Disable scanner after finding the desired QR code
+            if (searchTerm) {
+                qrCodeScanner.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 250 },
+                    handleQRCodeScannedDuringSearch,
+                    handleQRCodeError
+                );
             }
         }
 
-        searchButton.addEventListener("click", performSearch);
+        function handleQRCodeScannedDuringSearch(qrCodeMessage) {
+            if (qrCodeMessage === searchInput.value) {
+                console.log("Searched QR Code found:", qrCodeMessage);
+                displayResult("Searched QR Code Found: " + qrCodeMessage);
+            }
+        }
 
         // ... Rest of your code ...
     </script>
