@@ -4,15 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Scanner</title>
+    <style>
+        /* Adjust styling as needed */
+        #reader {
+            max-width: 100%;
+        }
+        #searchArea {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>QR Scanner</h1>
 
-    <div id="reader" style="max-width: 100%;"></div>
+    <div id="reader"></div>
 
     <button id="toggleScanner">Toggle Scanner</button>
 
-    <div id="searchArea" style="display: none;">
+    <div id="searchArea">
         <h2>Search Area</h2>
         <input type="text" id="searchInput" placeholder="Enter value to search">
         <button id="searchButton">Search</button>
