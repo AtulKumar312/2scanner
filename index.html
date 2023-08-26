@@ -27,10 +27,11 @@
     </div>
 
     <button id="toggleScanner">Toggle Scanner</button>
+    <button id="torchButton">Toggle Torch</button>
 
     <div id="result"></div>
     <div id="sessionMessage" style="display: none;">Session Started</div>
-    <script src="torch.js"></script>
+    
     <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
@@ -42,6 +43,9 @@
 
         const toggleScannerButton = document.getElementById("toggleScanner");
         toggleScannerButton.addEventListener("click", toggleScanner);
+
+        const torchButton = document.getElementById("torchButton");
+        torchButton.addEventListener("click", toggleTorch);
 
         const searchArea = document.getElementById("searchArea");
         const searchInput = document.getElementById("searchInput");
@@ -68,6 +72,17 @@
                 handleQRCodeError
             );
             scannerEnabled = true;
+        }
+
+        function toggleTorch() {
+            if (scannerEnabled) {
+                Html5Qrcode.getCameras().then(devices => {
+                    if (devices && devices.length > 0) {
+                        const cameraId = devices[0].id; // Use the first camera
+                        Html5Qrcode.toggleTorch(cameraId);
+                    }
+                });
+            }
         }
 
         function handleQRCodeScanned(qrCodeMessage) {
