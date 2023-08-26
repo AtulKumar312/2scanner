@@ -33,6 +33,7 @@
         const qrCodeScanner = new Html5Qrcode("reader");
         const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
         let sessionStarted = false;
+        let scannerEnabled = true; // Added variable to track scanner state
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
         const searchArea = document.getElementById("searchArea");
@@ -48,7 +49,7 @@
             if (!sessionStarted && qrCodeMessage === startSessionQRCode) {
                 console.log("Start Session QR Code detected:", qrCodeMessage);
                 startSession();
-            } else if (sessionStarted) {
+            } else if (sessionStarted && scannerEnabled) {
                 // Attempt to find a new QR code
                 attemptToFindNewQRCode(qrCodeMessage);
             }
@@ -88,10 +89,10 @@
 
         function performSearch() {
             const searchTerm = searchInput.value;
-            if (searchTerm === startSessionQRCode) {
+            if (scannerEnabled && searchTerm === startSessionQRCode) {
                 console.log("Searched QR Code found:", searchTerm);
                 displayResult("Searched QR Code Found: " + searchTerm);
-                qrCodeScanner.stop(); // Stop the QR code scanner
+                scannerEnabled = false; // Disable scanner after finding the desired QR code
             }
         }
 
