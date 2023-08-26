@@ -35,6 +35,7 @@
         let sessionStarted = false;
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
+        const searchArea = document.getElementById("searchArea");
 
         qrCodeScanner.start(
             { facingMode: "environment" },
@@ -72,7 +73,7 @@
             sessionMessage.style.display = "block";
             searchInput.removeAttribute("disabled"); // Enable search input
             searchButton.removeAttribute("disabled"); // Enable search button
-            document.getElementById("searchArea").style.display = "block"; // Display the search area
+            searchArea.style.display = "block"; // Display the search area
         }
 
         function attemptToFindNewQRCode(message) {
