@@ -8,43 +8,49 @@
 <body>
     <h1>QR Scanner</h1>
     <div id="reader" style="max-width: 100%;"></div>
+    <div id="result"></div>
 
     <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
 
-        window.addEventListener("DOMContentLoaded", () => {
+        qrCodeScanner.start(
+            { facingMode: "environment" }, // Use the back camera
+            { fps: 10, qrbox: 250 },
+            (qrCodeMessage) => {
+                // QR code detected
+                console.log("QR Code detected:", qrCodeMessage);
+                displayResult(qrCodeMessage);
+            },
+            (errorMessage) => {
+                // Failed to scan QR code
+                console.error(errorMessage);
+            }
+        );
+
+        const resultContainer = document.getElementById("result");
+
+        function displayResult(message) {
+            const resultElement = document.createElement("p");
+            resultElement.textContent = "Scanned QR Code: " + message;
+            resultContainer.appendChild(resultElement);
+        }
+
+        window.addEventListener("resize", () => {
             qrCodeScanner.start(
                 { facingMode: "environment" }, // Use the back camera
                 { fps: 10, qrbox: 250 },
                 (qrCodeMessage) => {
                     // QR code detected
                     console.log("QR Code detected:", qrCodeMessage);
-                    qrCodeScanner.stop();
+                    displayResult(qrCodeMessage);
                 },
                 (errorMessage) => {
                     // Failed to scan QR code
                     console.error(errorMessage);
                 }
             );
-
-            window.addEventListener("resize", () => {
-                qrCodeScanner.start(
-                    { facingMode: "environment" }, // Use the back camera
-                    { fps: 10, qrbox: 250 },
-                    (qrCodeMessage) => {
-                        // QR code detected
-                        console.log("QR Code detected:", qrCodeMessage);
-                        qrCodeScanner.stop();
-                    },
-                    (errorMessage) => {
-                        // Failed to scan QR code
-                        console.error(errorMessage);
-                    }
-                );
-            });
         });
     </script>
 </body>
 </html>
-
