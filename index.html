@@ -20,7 +20,7 @@
 
     <div id="reader"></div>
 
-    <div id="searchArea">
+    <div id="searchArea" style="margin-top: 230px;">
         <h2>Search Area</h2>
         <input type="text" id="searchInput" placeholder="Enter value to search">
         <button id="searchButton">Search</button>
@@ -154,6 +154,7 @@
             if (qrCodeMessage === searchInput.value) {
                 console.log("Searched QR Code found:", qrCodeMessage);
                 displayResult("Searched QR Code Found: " + qrCodeMessage);
+                qrCodeScanner.stop(); // Turn off the scanner when searched item is found
             } else if (qrCodeMessage === endSessionQRCode) {
                 endSession();
             }
