@@ -10,5 +10,5 @@ function toggleTorch() {
     } else {
         qrCodeScanner.turnOnFlash(); // Turn on the torch
     }
-    torchEnabled = !torchEnabled; // Toggle torch status
+    //torchEnabled = !torchEnabled; // Toggle torch status
 }
