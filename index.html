@@ -131,7 +131,6 @@
                         handleQRCodeScannedDuringSearch,
                         handleQRCodeError
                     );
-                    searchArea.style.marginTop = "460px"; // Move search area down
                 }
             }
         }
@@ -141,6 +140,7 @@
                 console.log("Searched QR Code found:", qrCodeMessage);
                 displayResult("Searched QR Code Found: " + qrCodeMessage);
                 qrCodeScanner.stop(); // Turn off the scanner when searched item is found
+                searchArea.style.marginTop = "460px"; // Move search area down
             } else if (qrCodeMessage === endSessionQRCode) {
                 endSession();
             }
