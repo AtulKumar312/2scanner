@@ -12,10 +12,10 @@
     <div id="sessionMessage" style="display: none;">Session Started</div>
     <button id="toggleScanner">Toggle Scanner</button>
 
-    <script src="node_modules/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
-        const startSessionQRCode = "start-session-qr-code"; // Change this to the QR code to start a session
+        const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
         let sessionStarted = false;
         let scannerEnabled = true;
 
