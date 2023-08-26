@@ -9,33 +9,53 @@
     <h1>QR Scanner</h1>
     <div id="reader" style="max-width: 100%;"></div>
     <div id="result"></div>
-    <div id="correctMessage" style="display: none;">Correct QR Code Found!</div>
+    <div id="sessionMessage" style="display: none;">Session Started</div>
+    <button id="toggleScanner">Toggle Scanner</button>
 
-    <script src="html5-qrcode.min.js"></script>
+    <script src="node_modules/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
-        const expectedQRCode = "http://1234"; // Change this to the expected QR code value
-        let correctCodeScanned = false;
+        const startSessionQRCode = "start-session-qr-code"; // Change this to the QR code to start a session
+        let sessionStarted = false;
+        let scannerEnabled = true;
 
-        qrCodeScanner.start(
-            { facingMode: "environment" }, // Use the back camera
-            { fps: 10, qrbox: 250 },
-            (qrCodeMessage) => {
-                if (!correctCodeScanned && qrCodeMessage === expectedQRCode) {
-                    console.log("Correct QR Code detected:", qrCodeMessage);
-                    displayResult(qrCodeMessage);
-                    correctCodeScanned = true;
-                    showCorrectMessage();
+        const toggleScannerButton = document.getElementById("toggleScanner");
+        toggleScannerButton.addEventListener("click", toggleScanner);
+
+        function toggleScanner() {
+            if (sessionStarted) {
+                if (scannerEnabled) {
+                    qrCodeScanner.stop();
+                    scannerEnabled = false;
+                } else {
+                    qrCodeScanner.start(
+                        { facingMode: "environment" },
+                        { fps: 10, qrbox: 250 },
+                        handleQRCodeScanned,
+                        handleQRCodeError
+                    );
+                    scannerEnabled = true;
                 }
-            },
-            (errorMessage) => {
-                // Failed to scan QR code
-                console.error(errorMessage);
             }
-        );
+        }
+
+        function handleQRCodeScanned(qrCodeMessage) {
+            if (!sessionStarted && qrCodeMessage === startSessionQRCode) {
+                console.log("Start Session QR Code detected:", qrCodeMessage);
+                startSession();
+            } else if (sessionStarted && scannerEnabled) {
+                // Attempt to find a new QR code
+                attemptToFindNewQRCode(qrCodeMessage);
+            }
+        }
+
+        function handleQRCodeError(errorMessage) {
+            // Failed to scan QR code
+            console.error(errorMessage);
+        }
 
         const resultContainer = document.getElementById("result");
-        const correctMessage = document.getElementById("correctMessage");
+        const sessionMessage = document.getElementById("sessionMessage");
 
         function displayResult(message) {
             const resultElement = document.createElement("p");
@@ -43,28 +63,23 @@
             resultContainer.appendChild(resultElement);
         }
 
-        function showCorrectMessage() {
-            correctMessage.style.display = "block";
+        function startSession() {
+            sessionStarted = true;
+            sessionMessage.style.display = "block";
+            qrCodeScanner.stop(); // Turn off the camera after session has started
         }
 
-        window.addEventListener("resize", () => {
-            qrCodeScanner.start(
-                { facingMode: "environment" }, // Use the back camera
-                { fps: 10, qrbox: 250 },
-                (qrCodeMessage) => {
-                    if (!correctCodeScanned && qrCodeMessage === expectedQRCode) {
-                        console.log("Correct QR Code detected:", qrCodeMessage);
-                        displayResult(qrCodeMessage);
-                        correctCodeScanned = true;
-                        showCorrectMessage();
-                    }
-                },
-                (errorMessage) => {
-                    // Failed to scan QR code
-                    console.error(errorMessage);
-                }
-            );
-        });
+        function attemptToFindNewQRCode(message) {
+            // Here you can implement logic to detect a new QR code
+            // For example, you might check if the scanned code is not the same as the startSessionQRCode
+            // If a new QR code is found, you can display a message or perform further actions.
+            if (message !== startSessionQRCode) {
+                console.log("New QR Code found:", message);
+                displayResult("New QR Code Found: " + message);
+            }
+        }
+
+        // ... Rest of your code ...
     </script>
 </body>
 </html>
