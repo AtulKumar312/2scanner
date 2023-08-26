@@ -119,20 +119,6 @@
             startScanner(); // Start the scanner again
         }
 
-        function reduceSearchAreaHeight() {
-            searchArea.style.marginTop = "0"; // Reduce margin-top to 0px
-        }
-
-        function attemptToFindNewQRCode(message) {
-            // Here you can implement logic to detect a new QR code
-            // For example, you might check if the scanned code is not the same as the startSessionQRCode
-            // If a new QR code is found, you can display a message or perform further actions.
-            if (message !== startSessionQRCode) {
-                console.log("New QR Code found:", message);
-                displayResult("New QR Code Found: " + message);
-            }
-        }
-
         function performSearch() {
             const searchTerm = searchInput.value;
             if (searchTerm && sessionStarted) {
@@ -145,7 +131,7 @@
                         handleQRCodeScannedDuringSearch,
                         handleQRCodeError
                     );
-                    reduceSearchAreaHeight(); // Call function to reduce search area height
+                    searchArea.style.marginTop = "460px"; // Move search area down
                 }
             }
         }
