@@ -26,15 +26,14 @@
         <button id="searchButton">Search</button>
     </div>
 
-    <button id="toggleScanner">Toggle Scanner</button>
-
     <div id="result"></div>
     <div id="sessionMessage" style="display: none;">Session Started</div>
 
     <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
-        const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
+        const startSessionQRCode = "http://start-session"; // Change this to the QR code to start a session
+        const endSessionQRCode = "http://end-session"; // Change this to the QR code to end a session
         let sessionStarted = false;
         let scannerEnabled = true;
         const scannedQRCodes = []; // Array to store scanned QR codes
@@ -74,8 +73,12 @@
                 console.log("Start Session QR Code detected:", qrCodeMessage);
                 startSession();
             } else if (sessionStarted && scannerEnabled) {
-                // Attempt to find a new QR code
-                attemptToFindNewQRCode(qrCodeMessage);
+                if (qrCodeMessage === endSessionQRCode) {
+                    endSession();
+                } else {
+                    // Attempt to find a new QR code
+                    attemptToFindNewQRCode(qrCodeMessage);
+                }
             }
         }
 
@@ -103,6 +106,15 @@
             sessionMessage.style.display = "block";
             searchArea.style.display = "block"; // Display the search area
             qrCodeScanner.stop(); // Turn off the camera after session has started
+        }
+
+        function endSession() {
+            sessionStarted = false;
+            sessionMessage.style.display = "none";
+            searchArea.style.display = "none"; // Hide the search area
+            resultContainer.innerHTML = ""; // Clear the result area
+            scannedQRCodes.length = 0; // Clear the scanned QR codes array
+            startScanner(); // Start the scanner again
         }
 
         function reduceSearchAreaHeight() {
