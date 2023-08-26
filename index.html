@@ -10,17 +10,21 @@
     <div id="reader" style="max-width: 100%;"></div>
     <div id="result"></div>
 
-    <script src="html5-qrcode.min.js"></script>
+    <script src="node_modules/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
+        const scannedCodes = new Set(); // To keep track of scanned QR codes
 
         qrCodeScanner.start(
             { facingMode: "environment" }, // Use the back camera
             { fps: 10, qrbox: 250 },
             (qrCodeMessage) => {
-                // QR code detected
-                console.log("QR Code detected:", qrCodeMessage);
-                displayResult(qrCodeMessage);
+                // Check if the QR code has been scanned before
+                if (!scannedCodes.has(qrCodeMessage)) {
+                    console.log("QR Code detected:", qrCodeMessage);
+                    scannedCodes.add(qrCodeMessage); // Add to the set of scanned codes
+                    displayResult(qrCodeMessage);
+                }
             },
             (errorMessage) => {
                 // Failed to scan QR code
@@ -41,9 +45,11 @@
                 { facingMode: "environment" }, // Use the back camera
                 { fps: 10, qrbox: 250 },
                 (qrCodeMessage) => {
-                    // QR code detected
-                    console.log("QR Code detected:", qrCodeMessage);
-                    displayResult(qrCodeMessage);
+                    if (!scannedCodes.has(qrCodeMessage)) {
+                        console.log("QR Code detected:", qrCodeMessage);
+                        scannedCodes.add(qrCodeMessage);
+                        displayResult(qrCodeMessage);
+                    }
                 },
                 (errorMessage) => {
                     // Failed to scan QR code
