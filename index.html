@@ -8,14 +8,16 @@
 <body>
     <h1>QR Scanner</h1>
     <div id="reader" style="max-width: 100%;"></div>
-    <div id="result"></div>
-    <div id="sessionMessage" style="display: none;">Session Started</div>
-    <div id="searchForm" style="display: none;">
+    <button id="toggleScanner">Toggle Scanner</button>
+    
+    <div id="searchArea" style="display: none;">
+        <h2>Search Area</h2>
         <input type="text" id="searchInput" placeholder="Enter value to search">
         <button id="searchButton">Search</button>
     </div>
-
-    <button id="toggleScanner">Toggle Scanner</button>
+    
+    <div id="result"></div>
+    <div id="sessionMessage" style="display: none;">Session Started</div>
 
     <script src="html5-qrcode.min.js"></script>
     <script>
@@ -27,7 +29,7 @@
         const toggleScannerButton = document.getElementById("toggleScanner");
         toggleScannerButton.addEventListener("click", toggleScanner);
 
-        const searchForm = document.getElementById("searchForm");
+        const searchArea = document.getElementById("searchArea");
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
         searchButton.addEventListener("click", performSearch);
@@ -77,7 +79,7 @@
         function startSession() {
             sessionStarted = true;
             sessionMessage.style.display = "block";
-            searchForm.style.display = "block";
+            searchArea.style.display = "block"; // Display the search area
             qrCodeScanner.stop(); // Turn off the camera after session has started
         }
 
