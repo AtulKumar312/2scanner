@@ -91,6 +91,7 @@
             if (searchTerm === startSessionQRCode) {
                 console.log("Searched QR Code found:", searchTerm);
                 displayResult("Searched QR Code Found: " + searchTerm);
+                qrCodeScanner.stop(); // Stop the QR code scanner
             }
         }
 
