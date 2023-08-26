@@ -19,10 +19,10 @@
 
     <div id="reader"></div>
 
-    <div id="searchArea">
+    <div id="searchArea" style="display: none;">
         <h2>Search Area</h2>
-        <input type="text" id="searchInput" placeholder="Enter value to search">
-        <button id="searchButton">Search</button>
+        <input type="text" id="searchInput" placeholder="Enter value to search" disabled>
+        <button id="searchButton" disabled>Search</button>
     </div>
 
     <div id="result"></div>
@@ -42,8 +42,6 @@
             handleQRCodeScanned,
             handleQRCodeError
         );
-
-        searchButton.addEventListener("click", performSearch);
 
         function handleQRCodeScanned(qrCodeMessage) {
             if (!sessionStarted && qrCodeMessage === startSessionQRCode) {
@@ -72,6 +70,9 @@
         function startSession() {
             sessionStarted = true;
             sessionMessage.style.display = "block";
+            searchInput.removeAttribute("disabled"); // Enable search input
+            searchButton.removeAttribute("disabled"); // Enable search button
+            document.getElementById("searchArea").style.display = "block"; // Display the search area
         }
 
         function attemptToFindNewQRCode(message) {
@@ -86,13 +87,13 @@
 
         function performSearch() {
             const searchTerm = searchInput.value;
-            if (searchTerm) {
-                if (searchTerm === startSessionQRCode) {
-                    console.log("Searched QR Code found:", searchTerm);
-                    displayResult("Searched QR Code Found: " + searchTerm);
-                }
+            if (searchTerm === startSessionQRCode) {
+                console.log("Searched QR Code found:", searchTerm);
+                displayResult("Searched QR Code Found: " + searchTerm);
             }
         }
+
+        searchButton.addEventListener("click", performSearch);
 
         // ... Rest of your code ...
     </script>
