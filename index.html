@@ -10,7 +10,6 @@
             max-width: 100%;
         }
         #searchArea {
-            display: none;
             margin-top: 20px;
         }
     </style>
@@ -22,7 +21,7 @@
 
     <button id="toggleScanner">Toggle Scanner</button>
 
-    <div id="searchArea">
+    <div id="searchArea" style="display: none;">
         <h2>Search Area</h2>
         <input type="text" id="searchInput" placeholder="Enter value to search">
         <button id="searchButton">Search</button>
@@ -49,8 +48,7 @@
         function toggleScanner() {
             if (!sessionStarted) {
                 if (scannerEnabled) {
-                    qrCodeScanner.clear(); // Clear the scanner UI
-                    qrCodeScanner.stop();
+                    qrCodeScanner.clear();
                     scannerEnabled = false;
                 } else {
                     qrCodeScanner.start(
