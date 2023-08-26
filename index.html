@@ -129,11 +129,4 @@
             // If a new QR code is found, you can display a message or perform further actions.
             if (message !== startSessionQRCode) {
                 console.log("New QR Code found:", message);
-                displayResult("New QR Code Found: " + message);
-            }
-        }
-
-        function performSearch() {
-            const searchTerm = searchInput.value;
-            if (searchTerm) {
-                if (searchTerm === endSessionQRCode) {
+               
