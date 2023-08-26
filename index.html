@@ -13,10 +13,18 @@
     <div id="result"></div>
     <div id="sessionMessage" style="display: none;">Session Started</div>
 
-    <script src="node_modules/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <div id="searchArea" style="display: none;">
+        <h2>Search Area</h2>
+        <input type="text" id="searchInput" placeholder="Enter value to search">
+        <button id="searchButton">Search</button>
+    </div>
+
+    <button id="toggleScanner">Toggle Scanner</button>
+
+    <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
-        const startSessionQRCode = "start-session-qr-code"; // Change this to the QR code to start a session
+        const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
         let sessionStarted = false;
         let scannerEnabled = true;
 
@@ -108,13 +116,5 @@
 
         // ... Rest of your code ...
     </script>
-
-    <div id="searchArea" style="display: none;">
-        <h2>Search Area</h2>
-        <input type="text" id="searchInput" placeholder="Enter value to search">
-        <button id="searchButton">Search</button>
-    </div>
-
-    <button id="toggleScanner">Toggle Scanner</button>
 </body>
 </html>
