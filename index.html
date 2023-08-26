@@ -49,19 +49,23 @@
         function toggleScanner() {
             if (!sessionStarted) {
                 if (scannerEnabled) {
-                    qrCodeScanner.clear(); // Clear the scanner UI
+                    qrCodeScanner.clear();
                     qrCodeScanner.stop();
                     scannerEnabled = false;
                 } else {
-                    qrCodeScanner.start(
-                        { facingMode: "environment" },
-                        { fps: 10, qrbox: 250 },
-                        handleQRCodeScanned,
-                        handleQRCodeError
-                    );
-                    scannerEnabled = true;
+                    startScanner();
                 }
             }
+        }
+
+        function startScanner() {
+            qrCodeScanner.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                handleQRCodeScanned,
+                handleQRCodeError
+            );
+            scannerEnabled = true;
         }
 
         function handleQRCodeScanned(qrCodeMessage) {
