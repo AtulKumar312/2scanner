@@ -33,7 +33,7 @@
         searchButton.addEventListener("click", performSearch);
 
         function toggleScanner() {
-            if (sessionStarted) {
+            if (!sessionStarted) {
                 if (scannerEnabled) {
                     qrCodeScanner.stop();
                     scannerEnabled = false;
