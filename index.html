@@ -27,7 +27,7 @@
     </div>
 
     <button id="toggleScanner">Toggle Scanner</button>
-    <button id="torchButton">Toggle Torch</button>
+    <button id="torchButton">Toggle Torch</button> <!-- Add the torch button -->
 
     <div id="result"></div>
     <div id="sessionMessage" style="display: none;">Session Started</div>
@@ -39,7 +39,7 @@
         const endSessionQRCode = "http://end-session"; // Change this to the QR code to end a session
         let sessionStarted = false;
         let scannerEnabled = true;
-        const scannedQRCodes = []; // Array to store scanned QR codes
+        let torchEnabled = false; // Torch status
 
         const toggleScannerButton = document.getElementById("toggleScanner");
         toggleScannerButton.addEventListener("click", toggleScanner);
@@ -80,6 +80,7 @@
                     if (devices && devices.length > 0) {
                         const cameraId = devices[0].id; // Use the first camera
                         Html5Qrcode.toggleTorch(cameraId);
+                        torchEnabled = !torchEnabled; // Toggle torch status
                     }
                 });
             }
