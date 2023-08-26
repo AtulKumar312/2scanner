@@ -49,6 +49,7 @@
         function toggleScanner() {
             if (!sessionStarted) {
                 if (scannerEnabled) {
+                    qrCodeScanner.clear(); // Clear the scanner UI
                     qrCodeScanner.stop();
                     scannerEnabled = false;
                 } else {
