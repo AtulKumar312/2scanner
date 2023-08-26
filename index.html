@@ -19,9 +19,7 @@
 
     <div id="reader"></div>
 
-    <button id="toggleScanner">Toggle Scanner</button>
-
-    <div id="searchArea" style="display: none;">
+    <div id="searchArea">
         <h2>Search Area</h2>
         <input type="text" id="searchInput" placeholder="Enter value to search">
         <button id="searchButton">Search</button>
@@ -35,38 +33,23 @@
         const qrCodeScanner = new Html5Qrcode("reader");
         const startSessionQRCode = "http://1234"; // Change this to the QR code to start a session
         let sessionStarted = false;
-        let scannerEnabled = true;
-
-        const toggleScannerButton = document.getElementById("toggleScanner");
-        toggleScannerButton.addEventListener("click", toggleScanner);
-
-        const searchArea = document.getElementById("searchArea");
         const searchInput = document.getElementById("searchInput");
         const searchButton = document.getElementById("searchButton");
-        searchButton.addEventListener("click", performSearch);
 
-        function toggleScanner() {
-            if (!sessionStarted) {
-                if (scannerEnabled) {
-                    qrCodeScanner.clear();
-                    scannerEnabled = false;
-                } else {
-                    qrCodeScanner.start(
-                        { facingMode: "environment" },
-                        { fps: 10, qrbox: 250 },
-                        handleQRCodeScanned,
-                        handleQRCodeError
-                    );
-                    scannerEnabled = true;
-                }
-            }
-        }
+        qrCodeScanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            handleQRCodeScanned,
+            handleQRCodeError
+        );
+
+        searchButton.addEventListener("click", performSearch);
 
         function handleQRCodeScanned(qrCodeMessage) {
             if (!sessionStarted && qrCodeMessage === startSessionQRCode) {
                 console.log("Start Session QR Code detected:", qrCodeMessage);
                 startSession();
-            } else if (sessionStarted && scannerEnabled) {
+            } else if (sessionStarted) {
                 // Attempt to find a new QR code
                 attemptToFindNewQRCode(qrCodeMessage);
             }
@@ -79,7 +62,6 @@
 
         const resultContainer = document.getElementById("result");
         const sessionMessage = document.getElementById("sessionMessage");
-        const searchInputField = document.getElementById("searchInput");
 
         function displayResult(message) {
             const resultElement = document.createElement("p");
@@ -90,8 +72,6 @@
         function startSession() {
             sessionStarted = true;
             sessionMessage.style.display = "block";
-            searchArea.style.display = "block"; // Display the search area
-            qrCodeScanner.stop(); // Turn off the camera after session has started
         }
 
         function attemptToFindNewQRCode(message) {
@@ -107,19 +87,10 @@
         function performSearch() {
             const searchTerm = searchInput.value;
             if (searchTerm) {
-                qrCodeScanner.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: 250 },
-                    handleQRCodeScannedDuringSearch,
-                    handleQRCodeError
-                );
-            }
-        }
-
-        function handleQRCodeScannedDuringSearch(qrCodeMessage) {
-            if (qrCodeMessage === searchInput.value) {
-                console.log("Searched QR Code found:", qrCodeMessage);
-                displayResult("Searched QR Code Found: " + qrCodeMessage);
+                if (searchTerm === startSessionQRCode) {
+                    console.log("Searched QR Code found:", searchTerm);
+                    displayResult("Searched QR Code Found: " + searchTerm);
+                }
             }
         }
 
