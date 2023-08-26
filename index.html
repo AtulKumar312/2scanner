@@ -30,7 +30,7 @@
 
     <div id="result"></div>
     <div id="sessionMessage" style="display: none;">Session Started</div>
-    
+
     <script src="html5-qrcode.min.js"></script>
     <script>
         const qrCodeScanner = new Html5Qrcode("reader");
@@ -38,6 +38,7 @@
         const endSessionQRCode = "http://end-session"; // Change this to the QR code to end a session
         let sessionStarted = false;
         let scannerEnabled = true;
+        const scannedQRCodes = []; // Array to store scanned QR codes
 
         const toggleScannerButton = document.getElementById("toggleScanner");
         toggleScannerButton.addEventListener("click", toggleScanner);
@@ -130,6 +131,7 @@
                         handleQRCodeScannedDuringSearch,
                         handleQRCodeError
                     );
+                    searchArea.style.marginTop = "230px"; // Move search area down
                 }
             }
         }
@@ -139,7 +141,6 @@
                 console.log("Searched QR Code found:", qrCodeMessage);
                 displayResult("Searched QR Code Found: " + qrCodeMessage);
                 qrCodeScanner.stop(); // Turn off the scanner when searched item is found
-                searchArea.style.marginTop = "230px"; // Move search area down
             } else if (qrCodeMessage === endSessionQRCode) {
                 endSession();
             }
