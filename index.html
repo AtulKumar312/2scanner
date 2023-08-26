@@ -100,6 +100,10 @@
             qrCodeScanner.stop(); // Turn off the camera after session has started
         }
 
+        function reduceSearchAreaHeight() {
+            searchArea.style.marginTop = "0"; // Reduce margin-top to 0px
+        }
+
         function attemptToFindNewQRCode(message) {
             // Here you can implement logic to detect a new QR code
             // For example, you might check if the scanned code is not the same as the startSessionQRCode
@@ -119,6 +123,7 @@
                     handleQRCodeScannedDuringSearch,
                     handleQRCodeError
                 );
+                reduceSearchAreaHeight(); // Call function to reduce search area height
             }
         }
 
